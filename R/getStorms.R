@@ -1,8 +1,21 @@
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Cmd + Shift + B'
-#   Check Package:             'Cmd + Shift + E'
-#   Test Package:              'Cmd + Shift + T'
+#'   Fetch NOAA historical best track storms data
+#'
+#'   Available basins:
+#'   - NA: North Atlantic
+#'   - SA: South Atlantic
+#'   - NI: North Indian
+#'   - SI: South Indian
+#'   - EP: East Pacific
+#'   - SP: South Pacific
+#'   - WP: West Pacific
+#'
+#'   @param basin: a string from the list of available basins
+#'   @example
+#'   getStorms('WP')
+#'
+#'   Build and Reload Package:  'Cmd + Shift + B'
+#'   Check Package:             'Cmd + Shift + E'
+#'   Test Package:              'Cmd + Shift + T'
 
 getStorms <- function(basin) {
 
