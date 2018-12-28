@@ -17,17 +17,17 @@
 #'   Check Package:             'Cmd + Shift + E'
 #'   Test Package:              'Cmd + Shift + T'
 
-getStorms <- function(basin) {
-
-  validBasins <- c('EP', 'NA', 'NI', 'SA', 'SI', 'SP', 'WP')
-  if (!basin %in% validBasins) stop('You have specified an incorrect basin code')
-
-  file <- stringr::str_glue('Basin.{basin}.ibtracs_all.v03r10.csv')
+#' @export
+makeURL <- function(basinCode) {
+  file <- stringr::str_glue('Basin.{basinCode}.ibtracs_all.v03r10.csv')
   urlPrefix <- 'ftp://eclipse.ncdc.noaa.gov/pub/ibtracs/v03r10/all/csv/basin/'
   url <- stringr::str_glue('{urlPrefix}{file}')
+  print(url)
+  return(url)
+}
 
-  basinData <- read.csv(file = url, skip = 1, stringsAsFactors = FALSE)
-
+#' @export
+cleanDataframe <- function(basinData) {
   # first column is garbled, disegard
   basinData <- basinData[-1, ]
 
@@ -38,5 +38,23 @@ getStorms <- function(basin) {
   basinData$Wind.WMO. <- as.numeric(gsub("^ ", "", basinData$Wind.WMO.))
   basinData$Name <- as.factor(basinData$Name)
 
-  return(basinData)
+  # filter apparent erroneous coordinates
+  basinData.filtered <- dplyr::filter(basinData,
+                                      !Latitude == -999,
+                                      !Longitude == -999)
+
+  return(basinData.filtered)
+}
+
+getStorms <- function(basin) {
+
+  validBasins <- c('EP', 'NA', 'NI', 'SA', 'SI', 'SP', 'WP')
+  if (!length(basin) == 1) stop('Please specify one basin code at a time')
+  if (!basin %in% validBasins) stop('You have specified an incorrect basin code')
+
+  url <- makeURL(basin)
+  basinData <- read.csv(file = url, skip = 1, stringsAsFactors = FALSE)
+
+  cleanData <- cleanDataframe(basinData)
+  return(cleanData)
 }
