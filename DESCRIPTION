@@ -1,11 +1,9 @@
 Package: noaastorms
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Get and clean storms paths, as tracked by the NOAA best tracks
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Basile Simon
+Maintainer: Basile Simon
+License: MIT
 Encoding: UTF-8
 LazyData: true
