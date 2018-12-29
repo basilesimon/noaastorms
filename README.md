@@ -1,6 +1,8 @@
 # NOAA Storms wrapper
 
-Get NOAA IBTrack data ready to use in R
+Get NOAA IBTrack data ready to use in R.
+
+The National Oceanic and Atmospheric Administration, which releases datasets known as [International Best Track Archive for Climate Stewardship](https://www.ncdc.noaa.gov/ibtracs/).
 
 # Installing
 
@@ -14,7 +16,8 @@ install_github("basilesimon/noaastorms")
 `getStorms`: Fetch NOAA historical best track storms data
 
 ```r
-> df <- getStorms(basin)
+> df <- getStorms('EP')
+
 > head(df[1:5])
      Serial_Num Season Num Basin Sub_basin    Name
 2 1902276N14266   1902  01    EP        MM UNNAMED
@@ -24,7 +27,7 @@ install_github("basilesimon/noaastorms")
 6 1902276N14266   1902  01    EP        MM UNNAMED
 ```
 
-**Arguments**: A basin code from the list:
+**Argument**: A basin code from the list:
   - NA: North Atlantic
   - SA: South Atlantic
   - NI: North Indian
@@ -36,16 +39,15 @@ install_github("basilesimon/noaastorms")
 ## Usage
 
 ```r
+# load a map of the world and `clipPolys` it to avoid issues when zooming in with `coord_map`
 wm <- map_data("world")
 library("PBSmapping")
 data.table::setnames(wm, c("X","Y","PID","POS","region","subregion"))
 worldmap = clipPolys(wm, xlim=c(20,110),ylim=c(0, 45), keepExtra=TRUE)
 
+# load storms for North Indian ocean
 spStorms <- getStorms('NI')
-spStorms <- spStorms %>% filter(!Latitude == -999,
-                                !Longitude == -999)
 
-library(dplyr)
 ggplot(spStorms, aes(x = Longitude, y = Latitude, group = Serial_Num)) + 
   geom_polygon(data = worldmap, aes(x = X, y = Y, group = PID), 
                fill = "whitesmoke", colour = "gray10", size = 0.2) +
