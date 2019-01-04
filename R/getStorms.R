@@ -10,8 +10,11 @@
 #'   - WP: West Pacific
 #'
 #'   @param basin: a vector of basin codes
+#'   @param dateRange: a vector of two valid dates: c(startDate, endDate)
 #'   @example
 #'   getStorms(c('NA', 'SA'))
+#'   getStorms(c('NA', 'SA'),
+#'     dateRange = c(as.Date('2010-01-01'), as.Date('2012-01-01')))
 #'
 #'   Build and Reload Package:  'Cmd + Shift + B'
 #'   Check Package:             'Cmd + Shift + E'
@@ -37,6 +40,7 @@ cleanDataframe <- function(basinData) {
   basinData$Longitude <- as.numeric(gsub("^ ", "", basinData$Longitude))
   basinData$Wind.WMO. <- as.numeric(gsub("^ ", "", basinData$Wind.WMO.))
   basinData$Name <- as.factor(basinData$Name)
+  basinData$ISO_time.parsed <- as.Date(basinData$ISO_time)
 
   # filter apparent erroneous coordinates
   basinData.filtered <- dplyr::filter(basinData,
@@ -46,7 +50,14 @@ cleanDataframe <- function(basinData) {
   return(basinData.filtered)
 }
 
-getStorms <- function(basins) {
+filterDateRange <- function(basinData, dateRange) {
+  basinData.dateFiltered <- dplyr::filter(basinData,
+                                          ISO_time.parsed > dateRange[1],
+                                          ISO_time.parsed < dateRange[2])
+  return(basinData.dateFiltered)
+}
+
+getStorms <- function(basins, dateRange) {
 
   validBasins <- c('EP', 'NA', 'NI', 'SA', 'SI', 'SP', 'WP')
 
@@ -61,6 +72,10 @@ getStorms <- function(basins) {
     basinData <- read.csv(file = url, skip = 1, stringsAsFactors = FALSE)
 
     cleanData <- cleanDataframe(basinData)
+    
+    if (hasArg(dateRange)) {
+      cleanData <- filterDateRange(cleanData, dateRange)
+    }
     allData <- rbind(allData, cleanData)
   }
 
