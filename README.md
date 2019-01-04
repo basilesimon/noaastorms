@@ -17,6 +17,8 @@ install_github("basilesimon/noaastorms")
 
 ```r
 > df <- getStorms('EP')
+> df2 <- getStorms('EP',
+                   dateRange = c(as.Date('2010-01-01'), as.Date('2012-01-01')))
 
 > head(df[1:5])
      Serial_Num Season Num Basin Sub_basin    Name
@@ -35,6 +37,8 @@ install_github("basilesimon/noaastorms")
   - EP: East Pacific
   - SP: South Pacific
   - WP: West Pacific
+  
+**Argument**: A vector of two dates. Storms dated outside of this date range will be filtered out.
 
 ## Usage
 

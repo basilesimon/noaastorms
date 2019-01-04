@@ -23,7 +23,7 @@ getStorms(basin, dateRange)
   - WP: West Pacific
   }
   \item{dateRange}{
-  A vector of two valid dates. Storms dated between the two dates will be kept if this parameter is passed. Ie:
+  A vector of two valid dates. Storms dated outside of this date range will be filtered out if this parameter is passed. Ie:
   c(startDate, endDate)
   }
 }
