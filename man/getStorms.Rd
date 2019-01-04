@@ -8,12 +8,12 @@ Get NOAA IBTrack data
 Fetch NOAA historical best track storms data
 }
 \usage{
-getStorms(basin, dateRange)
+getStorms(basins, dateRange)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{basin}{
-  A basin code from the list:
+  \item{basins}{
+  A vector of basin codes from the list:
   - NA: North Atlantic
   - SA: South Atlantic
   - NI: North Indian
@@ -36,5 +36,5 @@ Basile Simon <basile@basilesimon.fr>
 }
 
 \examples{
-getStorms("WP")
+getStorms(c('NA', 'SA'))
 }

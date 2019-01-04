@@ -9,11 +9,11 @@
 #'   - SP: South Pacific
 #'   - WP: West Pacific
 #'
-#'   @param basin: a string from the list of available basins
+#'   @param basin: a vector of basin codes
 #'   @param dateRange: a vector of two valid dates: c(startDate, endDate)
 #'   @example
-#'   getStorms('WP')
-#'   getStorms('EP',
+#'   getStorms(c('NA', 'SA'))
+#'   getStorms(c('NA', 'SA'),
 #'     dateRange = c(as.Date('2010-01-01'), as.Date('2012-01-01')))
 #'
 #'   Build and Reload Package:  'Cmd + Shift + B'
@@ -57,20 +57,27 @@ filterDateRange <- function(basinData, dateRange) {
   return(basinData.dateFiltered)
 }
 
-getStorms <- function(basin, dateRange) {
+getStorms <- function(basins, dateRange) {
 
   validBasins <- c('EP', 'NA', 'NI', 'SA', 'SI', 'SP', 'WP')
-  if (!length(basin) == 1) stop('Please specify one basin code at a time')
-  if (!basin %in% validBasins) stop('You have specified an incorrect basin code')
 
-  url <- makeURL(basin)
-  basinData <- read.csv(file = url, skip = 1, stringsAsFactors = FALSE)
+  # Stop if one basin code passed if found invalid
+  if(!all(basins %in% validBasins)) stop('You have specified an incorrect basin code')
 
-  cleanData <- cleanDataframe(basinData)
+  # iterate over basin codes as we've done for one before
+  # then merge result
+  allData <- data.frame()
+  for (basin in basins) {
+    url <- makeURL(basin)
+    basinData <- read.csv(file = url, skip = 1, stringsAsFactors = FALSE)
 
-  if (hasArg(dateRange)) {
-    cleanData <- filterDateRange(cleanData, dateRange)
+    cleanData <- cleanDataframe(basinData)
+    
+    if (hasArg(dateRange)) {
+      cleanData <- filterDateRange(cleanData, dateRange)
+    }
+    allData <- rbind(allData, cleanData)
   }
 
-  return(cleanData)
+  return(allData)
 }

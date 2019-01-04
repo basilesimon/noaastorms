@@ -16,8 +16,8 @@ install_github("basilesimon/noaastorms")
 `getStorms`: Fetch NOAA historical best track storms data
 
 ```r
-> df <- getStorms('EP')
-> df2 <- getStorms('EP',
+> df <- getStorms(c('EP'))
+> df2 <- getStorms(c('EP', 'SP'),
                    dateRange = c(as.Date('2010-01-01'), as.Date('2012-01-01')))
 
 > head(df[1:5])
@@ -29,7 +29,7 @@ install_github("basilesimon/noaastorms")
 6 1902276N14266   1902  01    EP        MM UNNAMED
 ```
 
-**Argument**: A basin code from the list:
+**Argument**: A vector of basin codes from the list:
   - NA: North Atlantic
   - SA: South Atlantic
   - NI: North Indian
@@ -50,7 +50,7 @@ data.table::setnames(wm, c("X","Y","PID","POS","region","subregion"))
 worldmap = clipPolys(wm, xlim=c(20,110),ylim=c(0, 45), keepExtra=TRUE)
 
 # load storms for North Indian ocean
-spStorms <- getStorms('NI')
+spStorms <- getStorms(c('NA', 'SA'))
 
 ggplot(spStorms, aes(x = Longitude, y = Latitude, group = Serial_Num)) + 
   geom_polygon(data = worldmap, aes(x = X, y = Y, group = PID), 
