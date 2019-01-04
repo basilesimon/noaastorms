@@ -9,9 +9,9 @@
 #'   - SP: South Pacific
 #'   - WP: West Pacific
 #'
-#'   @param basin: a string from the list of available basins
+#'   @param basin: a vector of basin codes
 #'   @example
-#'   getStorms('WP')
+#'   getStorms(c('NA', 'SA'))
 #'
 #'   Build and Reload Package:  'Cmd + Shift + B'
 #'   Check Package:             'Cmd + Shift + E'
