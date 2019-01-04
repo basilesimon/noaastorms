@@ -46,15 +46,23 @@ cleanDataframe <- function(basinData) {
   return(basinData.filtered)
 }
 
-getStorms <- function(basin) {
+getStorms <- function(basins) {
 
   validBasins <- c('EP', 'NA', 'NI', 'SA', 'SI', 'SP', 'WP')
-  if (!length(basin) == 1) stop('Please specify one basin code at a time')
-  if (!basin %in% validBasins) stop('You have specified an incorrect basin code')
 
-  url <- makeURL(basin)
-  basinData <- read.csv(file = url, skip = 1, stringsAsFactors = FALSE)
+  # Stop if one basin code passed if found invalid
+  if(!all(basins %in% validBasins)) stop('You have specified an incorrect basin code')
 
-  cleanData <- cleanDataframe(basinData)
-  return(cleanData)
+  # iterate over basin codes as we've done for one before
+  # then merge result
+  allData <- data.frame()
+  for (basin in basins) {
+    url <- makeURL(basin)
+    basinData <- read.csv(file = url, skip = 1, stringsAsFactors = FALSE)
+
+    cleanData <- cleanDataframe(basinData)
+    allData <- rbind(allData, cleanData)
+  }
+
+  return(allData)
 }
