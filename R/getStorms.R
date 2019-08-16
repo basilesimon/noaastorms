@@ -22,8 +22,10 @@
 
 #' @export
 makeURL <- function(basinCode) {
-  file <- stringr::str_glue('Basin.{basinCode}.ibtracs_all.v03r10.csv')
-  urlPrefix <- 'ftp://eclipse.ncdc.noaa.gov/pub/ibtracs/v03r10/all/csv/basin/'
+  # file <- stringr::str_glue('Basin.{basinCode}.ibtracs_all.v03r10.csv')
+  # urlPrefix <- 'ftp://eclipse.ncdc.noaa.gov/pub/ibtracs/v03r10/all/csv/basin/'
+  file <- stringr::str_glue('ibtracs.{basinCode}.list.v04r00.csv')
+  urlPrefix <- 'ftp://eclipse.ncdc.noaa.gov/pub/ibtracs/v04r00/provisional/csv/'
   url <- stringr::str_glue('{urlPrefix}{file}')
   print(url)
   return(url)
@@ -35,25 +37,25 @@ cleanDataframe <- function(basinData) {
   basinData <- basinData[-1, ]
 
   # cleaner columns
-  basinData$Season <- as.numeric(basinData$Season)
-  basinData$Latitude <- as.numeric(gsub("^ ", "", basinData$Latitude))
-  basinData$Longitude <- as.numeric(gsub("^ ", "", basinData$Longitude))
-  basinData$Wind.WMO. <- as.numeric(gsub("^ ", "", basinData$Wind.WMO.))
-  basinData$Name <- as.factor(basinData$Name)
-  basinData$ISO_time.parsed <- as.Date(basinData$ISO_time)
+  basinData$SEASON <- as.numeric(basinData$SEASON)
+  basinData$LAT <- as.numeric(gsub("^ ", "", basinData$LAT))
+  basinData$LON <- as.numeric(gsub("^ ", "", basinData$LON))
+  basinData$WMO_WIND <- as.numeric(gsub("^ ", "", basinData$WMO_WIND))
+  basinData$NAME <- as.factor(basinData$NAME)
+  basinData$ISO_TIME <- as.Date(basinData$ISO_TIME)
 
   # filter apparent erroneous coordinates
   basinData.filtered <- dplyr::filter(basinData,
-                                      !Latitude == -999,
-                                      !Longitude == -999)
+                                      !LAT == -999,
+                                      !LON == -999)
 
   return(basinData.filtered)
 }
 
 filterDateRange <- function(basinData, dateRange) {
   basinData.dateFiltered <- dplyr::filter(basinData,
-                                          ISO_time.parsed > dateRange[1],
-                                          ISO_time.parsed < dateRange[2])
+                                          ISO_TIME > dateRange[1],
+                                          ISO_TIME < dateRange[2])
   return(basinData.dateFiltered)
 }
 
@@ -69,10 +71,10 @@ getStorms <- function(basins, dateRange) {
   allData <- data.frame()
   for (basin in basins) {
     url <- makeURL(basin)
-    basinData <- read.csv(file = url, skip = 1, stringsAsFactors = FALSE)
+    basinData <- read.csv(file = url, stringsAsFactors = FALSE)
 
     cleanData <- cleanDataframe(basinData)
-    
+
     if (hasArg(dateRange)) {
       cleanData <- filterDateRange(cleanData, dateRange)
     }
