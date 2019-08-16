@@ -2,7 +2,7 @@ Package: noaastorms
 Type: Package
 Title: NOAA Storms Track scraper
 Description: Get and clean storms paths, as tracked by the NOAA best tracks
-Version: 0.3.0
+Version: 0.4.0
 Author: Basile Simon
 Maintainer: Basile Simon <basile@basilesimon.fr>
 License: MIT
