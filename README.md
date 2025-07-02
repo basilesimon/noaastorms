@@ -64,6 +64,6 @@ ggplot(spStorms, aes(x = Longitude, y = Latitude, group = Serial_Num)) +
 
 ## Notes
 
-This package uses IBTrACS data v4.0, released from March 2019.
+This package uses IBTrACS data v4.01, released from June 2024.
 
-For a complete description of the changes in v4.0, [read the official NOAA changelog](https://www.ncdc.noaa.gov/ibtracs/index.php?name=status).
+For a complete description of the changes in v4.01, [read the official NOAA changelog](https://www.ncdc.noaa.gov/ibtracs/index.php?name=status).
