@@ -23,7 +23,7 @@
 #' @export
 makeURL <- function(basinCode) {
   file <- stringr::str_glue('ibtracs.{basinCode}.list.v04r01.csv')
-  urlPrefix <- 'ftp://eclipse.ncdc.noaa.gov/pub/ibtracs/v04r01/provisional/csv/'
+  urlPrefix <- 'https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r01/access/csv/'
   url <- stringr::str_glue('{urlPrefix}{file}')
   print(url)
   return(url)
